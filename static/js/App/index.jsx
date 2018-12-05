@@ -1,7 +1,10 @@
 import React from "react";
+import { Container } from "reactstrap";
 
 export default class App extends React.Component {
   render () {
-    return <p> Hello React!</p>;
+    return (
+      <Container>Hey</Container>
+    );
   }
 }
