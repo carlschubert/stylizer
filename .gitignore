@@ -1,2 +1,6 @@
 */node_modules
-*/diststatic/.DS_Store
+*/.DS_Store
+server/model
+server/images
+server/output
+*.pyc
