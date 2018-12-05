@@ -1,8 +1,8 @@
-from flask import Flask
+from flask import Flask, render_template
 
 import subprocess
 
-app = Flask(__name__, static_folder="static/dist", template_folder="static/dist")
+app = Flask(__name__, static_folder="../static/dist", template_folder="../static/dist")
 
 CMD = """arbitrary_image_stylization_with_weights \
   --checkpoint=$(pwd)/model/model.ckpt \
@@ -23,7 +23,7 @@ def run_script():
 def hello():
     # run_script()
     
-    return "YAAAAY!"
+    return render_template("index.html")
 
 if __name__ == "__main__":
   app.run(debug=True)
