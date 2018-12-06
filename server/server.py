@@ -21,9 +21,25 @@ def run_script():
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
+    import base64
     if request.method == 'POST':
-      print(request.data)
-      return jsonify(True)
+      # styleBinaries = request.data['styleBin']
+      # contentBinaries = request.data['contentBin']
+      app.logger.info(f'len sbin: {request.files}')
+
+      # byteeee = base64.decodebytes(styleBinaries[0])
+      
+      # app.logger.info(f'len sbin: {len(styleBinaries)}')
+      # app.logger.info(f'len bin1: {len(styleBinaries[0])}')
+      # app.logger.info(f'len bin2: {len(styleBinaries[0])}')
+      # app.logger.info(f'len bin2: {byteeee[:100]}')
+      # app.logger.info(f'len bin2: {type(styleBinaries[0])}')
+      
+
+      # with open('test.jpg', 'w') as handle:
+      #   handle.write(byteeee)
+      
+      return jsonify(canitacceptboolean=True)
     else:
       return render_template("index.html")
 
