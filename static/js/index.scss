@@ -1,0 +1,7 @@
+@import "~bootstrap/scss/bootstrap";
+
+@import "./DragAndDrop/index.scss";
+
+html, body, #root, #root > div {
+    height: 100%
+}
