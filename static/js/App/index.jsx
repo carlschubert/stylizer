@@ -13,6 +13,62 @@ const initialState = {
   isLoading: false,
 }
 
+const testData = [
+  {
+    "src": "output/style_image_1.jpg", 
+    "style_source": "1", 
+    "type": "style"
+  }, 
+  {
+    "content_source": "1", 
+    "src": "output/content_image_1.jpg", 
+    "type": "content"
+  }, 
+  {
+    "content_source": "1", 
+    "interpolation_weight": "0", 
+    "src": "output/content_image_1_stylized_style_image_1_0.jpg", 
+    "style_source": "1", 
+    "type": "pastiche"
+  }, 
+  {
+    "content_source": "1", 
+    "interpolation_weight": "1", 
+    "src": "output/content_image_1_stylized_style_image_1_1.jpg", 
+    "style_source": "1", 
+    "type": "pastiche"
+  }, 
+  {
+    "content_source": "1", 
+    "interpolation_weight": "3", 
+    "src": "output/content_image_1_stylized_style_image_1_3.jpg", 
+    "style_source": "1", 
+    "type": "pastiche"
+  }, 
+  {
+    "content_source": "1", 
+    "interpolation_weight": "2", 
+    "src": "output/content_image_1_stylized_style_image_1_2.jpg", 
+    "style_source": "1", 
+    "type": "pastiche"
+  }, 
+  {
+    "content_source": "1", 
+    "interpolation_weight": "5", 
+    "src": "output/content_image_1_stylized_style_image_1_5.jpg", 
+    "style_source": "1", 
+    "type": "pastiche"
+  }, 
+  {
+    "content_source": "1", 
+    "interpolation_weight": "4", 
+    "src": "output/content_image_1_stylized_style_image_1_4.jpg", 
+    "style_source": "1", 
+    "type": "pastiche"
+  }
+]
+
+
 export default class App extends Component {
 
   state = initialState;
@@ -60,10 +116,14 @@ export default class App extends Component {
       payload.append('contentBin', contentImgs[i], `content_image_${i + 1}.jpg`);
     }
 
-    this.setState({
-      isLoading: true
-    })
+    // this.setState({
+    //   outputData: testData
+    // })
+    // return
 
+    this.setState({
+      isLoading: true,
+    })
     return fetch(url, {
       method: "POST",
       body: payload,
@@ -91,7 +151,7 @@ export default class App extends Component {
 
     const { outputData, styleImgs, contentImgs, isLoading } = this.state;
     return (
-      <Container style={{ 'min-height': '100%' }}>
+      <Container style={{ 'minHeight': '100%' }}>
         <Header />
         <Loading isLoading={isLoading}>
           {outputData.length ?

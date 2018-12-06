@@ -1,8 +1,12 @@
 import React from "react";
 import { Card, CardImg } from 'reactstrap';
+import ImageDisplayRow from "./ImageDisplayRow";
 
 const ImageDisplay = (props) => {
     const { outputData, name } = props
+
+
+
     return (
         <div
             className="w-100"
@@ -15,16 +19,11 @@ const ImageDisplay = (props) => {
                 {outputData.map(metadata => {
 
                     return (
-                        <Card
-                            style={{ 'maxWidth': '320px' }}
-                            key={metadata}
-                        >
-                            <CardImg
-                                src={metadata}
-                                alt={metadata}
-
-                            />
-                        </Card>
+                        <ImageDisplayRow
+                        contentImage={metadata.contentImage}
+                        styleImage={metadata.styleImage}
+                        pastiches={metadata.pastiches}
+                         />
                     )
                 })}
             </div>
