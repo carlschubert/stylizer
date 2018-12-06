@@ -44,28 +44,23 @@ def cleanup_static():
 def get_image_metadata():
   output_urls = os.listdir(os.path.join(STATIC_DIR, "output"))
 
-  styles = {}
-  contents = {}
+  styles = []
+  contents = []
   iws = {}
   for url in sorted(output_urls):
     if 'content_image' in url and 'style_image' in url:
       csource, ssource, iw = re.match(PASTICHE_URL_PATTERN, url).groups()
       
-      iws.setdefault(csource, {}).setdefault(ssource, []).append({
-        "src": os.path.join('output', url),
-        "interpolation_weight": iw
-      })
+      iws.setdefault(csource, {}).setdefault(ssource, []).append(
+        os.path.join('output', url)
+      )
     elif 'content_image' in url:
       csource = re.match(CONTENT_URL_PATTERN, url).groups()[0]
-      contents[csource] = {
-        "src": os.path.join('output', url),
-      }
+      contents.append(os.path.join('output', url))
+      
     elif 'style_image' in url:
       ssource = re.match(STYLE_URL_PATTERN, url).groups()[0]
-      styles[ssource] = {
-        "src": os.path.join('output', url),
-        "style_source": ssource
-      }
+      styles.append(os.path.join('output', url))
     else:
       raise Exception("Unexpected result type: {}".format(url))
 

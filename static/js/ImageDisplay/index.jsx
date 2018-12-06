@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardImg } from 'reactstrap';
 import ImageDisplayRow from "./ImageDisplayRow";
+import PasticheCarousel from "./PasticheCarousel";
 
 const ImageDisplay = (props) => {
     const { outputData, name } = props
@@ -16,16 +17,7 @@ const ImageDisplay = (props) => {
             <h3 className="text-center">{name}</h3>
 
             <div className="h-50">
-                {outputData.map(metadata => {
-
-                    return (
-                        <ImageDisplayRow
-                        contentImage={metadata.contentImage}
-                        styleImage={metadata.styleImage}
-                        pastiches={metadata.pastiches}
-                         />
-                    )
-                })}
+                <ImageDisplayRow outputData={outputData} />
             </div>
 
         </div>)
