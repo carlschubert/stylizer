@@ -3,13 +3,14 @@ import { Container } from "reactstrap";
 import Header from "../Header"
 import DragAndDrop from "../DragAndDrop"
 import GoButton from "../GoButton"
+import ImageDisplay from "../ImageDisplay";
 
 export default class App extends Component {
 
   state = {
     styleImgs: [],
     contentImgs: [],
-    outputImgs: []
+    outputUrls: []
   }
 
   handleDrop = (target, files) => {
@@ -52,17 +53,24 @@ export default class App extends Component {
     }
 
     return fetch(url, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      body: payload, // body data type must match "Content-Type" header
+      method: "POST",
+      body: payload,
     })
-      .then(response => response.json()); // parses response to JSON
-
+      .then(response => {
+        
+        return response.json();
+      }).then(files => {
+        console.log(files)
+        this.setState({
+          outputUrls: files
+        })
+      })
 
   }
 
   render() {
 
-    const { styleImgs, contentImgs } = this.state;
+    const { outputUrls, styleImgs, contentImgs } = this.state;
     return (
       <Container style={{ 'min-height': '100%' }}>
         <Header />
@@ -79,6 +87,7 @@ export default class App extends Component {
           handleDrop={this.handleDrop}
         />
         <GoButton handleSubmit={this.handleSubmit} />
+        <ImageDisplay urls={outputUrls} name="Output" />
       </Container>
     );
   }
