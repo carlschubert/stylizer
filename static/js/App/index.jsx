@@ -38,52 +38,24 @@ export default class App extends Component {
 
   handleSubmit = () => {
 
-    const { styleImgs,  contentImgs } = this.state
+    const { styleImgs, contentImgs } = this.state
     const url = 'http://localhost:5000/';
 
-    const stylePromises = Promise.all(styleImgs.map(img => {
-      return this.processImg(img)
-    }));
+    const payload = new FormData();
 
-    const contentPromises = Promise.all(contentImgs.map(img => {
-      return this.processImg(img)
-    }));
+    for (var i = 0; i < styleImgs.length; i++) {
+      payload.append('styleBin', styleImgs[i], `style_image_${i + 1}.jpg`);
+    }
 
-    return Promise.all([stylePromises, contentPromises])
-    .then(result => {
-      const [style, content] = result
-      const payload = new FormData();
-      
-      for (var i = 0; i < style.length; i++) {
-        console.log('works')
-        payload.append('styleBin', style[i]);
-      }
+    for (var i = 0; i < contentImgs.length; i++) {
+      payload.append('contentBin', contentImgs[i], `content_image_${i + 1}.jpg`);
+    }
 
-      for (var i = 0; i < content.length; i++) {
-        payload.append('contentBin', content[i]);
-      }
-
-
-      console.log(payload.getAll('styleBin'))
-
-      // const payload = {
-      //   styleBin: style,
-      //   contentBin: content,
-      // }
-
-      return fetch(url, {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
-        // mode: "cors",
-        // headers: {
-        //   "Content-Type": "application/json; charset=utf-8",
-        //   // "Content-Type": "application/x-www-form-urlencoded",
-        // },
-        // redirect: "follow", // manual, *follow, error
-        // referrer: "no-referrer", // no-referrer, *client
-        body: payload, // body data type must match "Content-Type" header
-      })
-        .then(response => response.json()); // parses response to JSON
+    return fetch(url, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      body: payload, // body data type must match "Content-Type" header
     })
+      .then(response => response.json()); // parses response to JSON
 
 
   }

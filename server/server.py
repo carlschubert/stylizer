@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, jsonify
 
 import subprocess
@@ -21,23 +22,22 @@ def run_script():
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
-    import base64
+    # TODO form validaton
+      # * must be jpeg
+      # * must be secure url
+      # * at least one style and content image
+      # * handle filetypes other than jpg
     if request.method == 'POST':
-      # styleBinaries = request.data['styleBin']
-      # contentBinaries = request.data['contentBin']
-      app.logger.info(f'len sbin: {request.files}')
+      style_images = request.files.getlist('styleBin')
+      for i, im in enumerate(style_images):
+        im.save(os.path.join(os.getcwd(), "images", "style", im.name ))
 
-      # byteeee = base64.decodebytes(styleBinaries[0])
-      
-      # app.logger.info(f'len sbin: {len(styleBinaries)}')
-      # app.logger.info(f'len bin1: {len(styleBinaries[0])}')
-      # app.logger.info(f'len bin2: {len(styleBinaries[0])}')
-      # app.logger.info(f'len bin2: {byteeee[:100]}')
-      # app.logger.info(f'len bin2: {type(styleBinaries[0])}')
-      
+      content_images = request.files.getlist('contentBin')
+      for i, im in enumerate(content_images):
+        im.save(os.path.join(os.getcwd(), "images", "content", im.name ))
+     
 
-      # with open('test.jpg', 'w') as handle:
-      #   handle.write(byteeee)
+     
       
       return jsonify(canitacceptboolean=True)
     else:
