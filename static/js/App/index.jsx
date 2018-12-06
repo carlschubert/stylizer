@@ -19,26 +19,59 @@ export default class App extends Component {
     })
   }
 
-  handleSubmit = () => {
-    const url = 'http://localhost:5000/'
-    // Default options are marked with *
-    console.log(this.state);
-    return fetch(url, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        // "Content-Type": "application/x-www-form-urlencoded",
-      },
-      redirect: "follow", // manual, *follow, error
-      referrer: "no-referrer", // no-referrer, *client
-      body: JSON.stringify(this.state), // body data type must match "Content-Type" header
+  processImg = (img) => {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+
+      reader.onerror = (e) => {
+        reject(e);
+      }
+
+      reader.onload = (e) => {
+        resolve(reader.result);
+      };
+
+      reader.readAsBinaryString(img);
+
     })
-      .then(res => {
-        console.log(this.state);
-        return res;
+  }
+
+  handleSubmit = () => {
+
+    const { styleImgs,  contentImgs } = this.state
+    const url = 'http://localhost:5000/';
+
+    const stylePromises = Promise.all(styleImgs.map(img => {
+      return this.processImg(img)
+    }));
+
+    const contentPromises = Promise.all(contentImgs.map(img => {
+      return this.processImg(img)
+    }));
+
+    console.log('contentPromises',contentPromises)
+
+    return Promise.all([stylePromises, contentPromises])
+    .then(result => {
+      const [style, content] = result
+      const payload = {
+        styleBin: style,
+        contentBin: content,
+      }
+      return fetch(url, {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          // "Content-Type": "application/x-www-form-urlencoded",
+        },
+        redirect: "follow", // manual, *follow, error
+        referrer: "no-referrer", // no-referrer, *client
+        body: JSON.stringify(payload), // body data type must match "Content-Type" header
       })
-      .then(response => response.json()); // parses response to JSON
+        .then(response => response.json()); // parses response to JSON
+    })
+
 
   }
 

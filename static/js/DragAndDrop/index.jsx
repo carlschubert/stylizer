@@ -7,7 +7,7 @@ const DragAndDrop = (props) => {
     return (
         <Dropzone
             className="w-100"
-            style={{ 'min-height': '30%' }}
+            style={{ 'minHeight': '30%' }}
             activeClassName="border bg-secondary"
             onDrop={(files) => handleDrop(target, files)}>
 
@@ -18,7 +18,7 @@ const DragAndDrop = (props) => {
 
                     return (
                         <Card
-                            style={{ 'max-width': '320px' }}
+                            style={{ 'maxWidth': '320px' }}
                             key={img.name}
                         >
                             <CardImg
