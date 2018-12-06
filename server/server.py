@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 
 import subprocess
 
@@ -19,11 +19,13 @@ CMD = """arbitrary_image_stylization_with_weights \
 def run_script():
     subprocess.call(CMD, shell=True)
 
-@app.route("/")
-def hello():
-    # run_script()
-    
-    return render_template("index.html")
+@app.route("/", methods=['GET', 'POST'])
+def main():
+    if request.method == 'POST':
+      print(request.data)
+      return jsonify(True)
+    else:
+      return render_template("index.html")
 
 if __name__ == "__main__":
   app.run(debug=True)
