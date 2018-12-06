@@ -2,7 +2,8 @@ import React from "react";
 import { Button } from "reactstrap"
 
 const GoButton = (props) => {
-    return (<Button>Go!</Button>);
+    const { handleSubmit } = props;
+    return (<Button onClick={handleSubmit}>Go!</Button>);
 }
 
 export default GoButton;
