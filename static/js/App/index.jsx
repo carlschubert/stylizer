@@ -1,17 +1,21 @@
-import React, { Component } from "react";
-import { Container } from "reactstrap";
+import React, { Component, Fragment } from "react";
+import { Container, Button } from "reactstrap";
 import Header from "../Header"
 import DragAndDrop from "../DragAndDrop"
 import GoButton from "../GoButton"
 import ImageDisplay from "../ImageDisplay";
+import Loading from '../Loading'
+
+const initialState = {
+  styleImgs: [],
+  contentImgs: [],
+  outputData: [],
+  isLoading: false,
+}
 
 export default class App extends Component {
 
-  state = {
-    styleImgs: [],
-    contentImgs: [],
-    outputUrls: []
-  }
+  state = initialState;
 
   handleDrop = (target, files) => {
 
@@ -37,6 +41,10 @@ export default class App extends Component {
     })
   }
 
+  reset = () => {
+    this.setState(initialState)
+  }
+
   handleSubmit = () => {
 
     const { styleImgs, contentImgs } = this.state
@@ -52,42 +60,64 @@ export default class App extends Component {
       payload.append('contentBin', contentImgs[i], `content_image_${i + 1}.jpg`);
     }
 
+    this.setState({
+      isLoading: true
+    })
+
     return fetch(url, {
       method: "POST",
       body: payload,
     })
       .then(response => {
-        
+
         return response.json();
       }).then(files => {
         console.log(files)
         this.setState({
-          outputUrls: files
+          outputData: files,
+          isLoading: false
         })
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false
+        })
+        throw err;
       })
 
   }
 
   render() {
 
-    const { outputUrls, styleImgs, contentImgs } = this.state;
+    const { outputData, styleImgs, contentImgs, isLoading } = this.state;
     return (
       <Container style={{ 'min-height': '100%' }}>
         <Header />
-        <DragAndDrop
-          name="Content Images"
-          target="contentImgs"
-          imgs={contentImgs}
-          handleDrop={this.handleDrop}
-        />
-        <DragAndDrop
-          name="Style Images"
-          target="styleImgs"
-          imgs={styleImgs}
-          handleDrop={this.handleDrop}
-        />
-        <GoButton handleSubmit={this.handleSubmit} />
-        <ImageDisplay urls={outputUrls} name="Output" />
+        <Loading isLoading={isLoading}>
+          {outputData.length ?
+            <Fragment>
+
+              <ImageDisplay outputData={outputData} name="Output" />
+              <Button onClick={this.reset}>Reset</Button>
+            </Fragment>
+            :
+            <Fragment>
+              <DragAndDrop
+                name="Content Images"
+                target="contentImgs"
+                imgs={contentImgs}
+                handleDrop={this.handleDrop}
+              />
+              <DragAndDrop
+                name="Style Images"
+                target="styleImgs"
+                imgs={styleImgs}
+                handleDrop={this.handleDrop}
+              />
+              <GoButton handleSubmit={this.handleSubmit} />
+            </Fragment>
+          }
+        </Loading>
       </Container>
     );
   }
