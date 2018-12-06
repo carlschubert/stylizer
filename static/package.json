@@ -8,7 +8,7 @@
     "dev-build": "webpack --progress -d --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --progress -d --config webpack.config.js --watch",
-    "start": "webpack-dev-server --open --mode development"
+    "start": "concurrently \"npm run-script watch\" \"python ../server/server.py\""
   },
   "author": "carlschubert goodwordalchemy",
   "license": "ISC",
