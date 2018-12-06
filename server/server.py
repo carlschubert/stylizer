@@ -44,34 +44,36 @@ def cleanup_static():
 def get_image_metadata():
   output_urls = os.listdir(os.path.join(STATIC_DIR, "output"))
 
-  metadata = []
-  for url in output_urls:
+  styles = {}
+  contents = {}
+  iws = {}
+  for url in sorted(output_urls):
     if 'content_image' in url and 'style_image' in url:
       csource, ssource, iw = re.match(PASTICHE_URL_PATTERN, url).groups()
-      metadata.append({
+      
+      iws.setdefault(csource, {}).setdefault(ssource, []).append({
         "src": os.path.join('output', url),
-        "type": 'pastiche',
-        "style_source": ssource,
-        "content_source": csource,
         "interpolation_weight": iw
       })
     elif 'content_image' in url:
       csource = re.match(CONTENT_URL_PATTERN, url).groups()[0]
-      metadata.append({
+      contents[csource] = {
         "src": os.path.join('output', url),
-        "type": 'content',
-        "content_source": csource
-      })
+      }
     elif 'style_image' in url:
       ssource = re.match(STYLE_URL_PATTERN, url).groups()[0]
-      metadata.append({
+      styles[ssource] = {
         "src": os.path.join('output', url),
-        "type": 'style',
         "style_source": ssource
-      })
+      }
     else:
       raise Exception("Unexpected result type: {}".format(url))
 
+  metadata = {
+    'styles':styles,
+    'contents': contents,
+    'interp_weights': iws
+  }
   return metadata
 
 @app.route('/output/<path:filename>')
