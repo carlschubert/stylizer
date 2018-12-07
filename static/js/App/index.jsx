@@ -9,65 +9,9 @@ import Loading from '../Loading'
 const initialState = {
   styleImgs: [],
   contentImgs: [],
-  outputData: [],
+  outputData: {},
   isLoading: false,
 }
-
-const testData = [
-  {
-    "src": "output/style_image_1.jpg", 
-    "style_source": "1", 
-    "type": "style"
-  }, 
-  {
-    "content_source": "1", 
-    "src": "output/content_image_1.jpg", 
-    "type": "content"
-  }, 
-  {
-    "content_source": "1", 
-    "interpolation_weight": "0", 
-    "src": "output/content_image_1_stylized_style_image_1_0.jpg", 
-    "style_source": "1", 
-    "type": "pastiche"
-  }, 
-  {
-    "content_source": "1", 
-    "interpolation_weight": "1", 
-    "src": "output/content_image_1_stylized_style_image_1_1.jpg", 
-    "style_source": "1", 
-    "type": "pastiche"
-  }, 
-  {
-    "content_source": "1", 
-    "interpolation_weight": "3", 
-    "src": "output/content_image_1_stylized_style_image_1_3.jpg", 
-    "style_source": "1", 
-    "type": "pastiche"
-  }, 
-  {
-    "content_source": "1", 
-    "interpolation_weight": "2", 
-    "src": "output/content_image_1_stylized_style_image_1_2.jpg", 
-    "style_source": "1", 
-    "type": "pastiche"
-  }, 
-  {
-    "content_source": "1", 
-    "interpolation_weight": "5", 
-    "src": "output/content_image_1_stylized_style_image_1_5.jpg", 
-    "style_source": "1", 
-    "type": "pastiche"
-  }, 
-  {
-    "content_source": "1", 
-    "interpolation_weight": "4", 
-    "src": "output/content_image_1_stylized_style_image_1_4.jpg", 
-    "style_source": "1", 
-    "type": "pastiche"
-  }
-]
-
 
 export default class App extends Component {
 
@@ -132,7 +76,6 @@ export default class App extends Component {
 
         return response.json();
       }).then(files => {
-        console.log(files)
         this.setState({
           outputData: files,
           isLoading: false
@@ -150,11 +93,12 @@ export default class App extends Component {
   render() {
 
     const { outputData, styleImgs, contentImgs, isLoading } = this.state;
+
     return (
       <Container style={{ 'minHeight': '100%' }}>
         <Header />
         <Loading isLoading={isLoading}>
-          {outputData.length ?
+          {Object.keys(outputData).length > 0 ?
             <Fragment>
 
               <ImageDisplay outputData={outputData} name="Output" />

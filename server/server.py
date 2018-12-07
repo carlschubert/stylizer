@@ -7,9 +7,7 @@ from flask import Flask, render_template, request, jsonify, send_from_directory
 SERVER_DIR = "../server"
 STATIC_DIR = "../static/dist"
 
-CONTENT_URL_PATTERN = r'content_image_(\d+).jpg'
-STYLE_URL_PATTERN = r'style_image_(\d+).jpg'
-PASTICHE_URL_PATTERN = r'content_image_(\d+)_stylized_style_image_(\d+)_(\d+).jpg'
+PASTICHE_URL_PATTERN = r'content_image_(\d+)_stylized_style_image_(\d+)_\d+.jpg'
 
 app = Flask(__name__, static_folder=STATIC_DIR, template_folder=STATIC_DIR)
 
@@ -49,17 +47,15 @@ def get_image_metadata():
   iws = {}
   for url in sorted(output_urls):
     if 'content_image' in url and 'style_image' in url:
-      csource, ssource, iw = re.match(PASTICHE_URL_PATTERN, url).groups()
+      csource, ssource = re.match(PASTICHE_URL_PATTERN, url).groups()
       
-      iws.setdefault(csource, {}).setdefault(ssource, []).append(
+      iws.setdefault(int(csource)-1, {}).setdefault(int(ssource)-1, []).append(
         os.path.join('output', url)
       )
     elif 'content_image' in url:
-      csource = re.match(CONTENT_URL_PATTERN, url).groups()[0]
       contents.append(os.path.join('output', url))
       
     elif 'style_image' in url:
-      ssource = re.match(STYLE_URL_PATTERN, url).groups()[0]
       styles.append(os.path.join('output', url))
     else:
       raise Exception("Unexpected result type: {}".format(url))
