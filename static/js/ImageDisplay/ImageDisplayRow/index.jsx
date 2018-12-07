@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import { Card, CardImg } from 'reactstrap';
 import PasticheCarousel from '../PasticheCarousel';
 
 class ImageDisplayRow extends Component {
@@ -36,15 +35,8 @@ class ImageDisplayRow extends Component {
         const { content, style, pastiche } = this.state
         const { contents, styles, interp_weights } = this.props.outputData;
 
-        console.log('content',content)
-        console.log('style', style)
-        console.log('pastiche',pastiche)
-        console.log('contents', contents);
-        console.log('styles', styles);
-        console.log('pastices', interp_weights[content][style]);
-
         return (
-            <Fragment>
+            <div className="h-100 d-flex flex-nowrap justify-content-center align-items-center flex-column flex-md-row">
                 <PasticheCarousel
                     items={contents}
                     activeIndex={content}
@@ -67,7 +59,7 @@ class ImageDisplayRow extends Component {
                     goToIndex={this.goToIndex('style')}
                 />
 
-            </Fragment>
+            </div>
 
         )
     }

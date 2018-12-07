@@ -5,15 +5,20 @@ import Dropzone from 'react-dropzone';
 const DragAndDrop = (props) => {
     const { imgs, name, handleDrop, target } = props
     return (
-        <Dropzone
+        <div
             className="w-100"
             style={{ 'minHeight': '30%' }}
-            activeClassName="border bg-secondary"
-            onDrop={(files) => handleDrop(target, files)}>
+
+        >
 
             <h3 className="text-center">{name}</h3>
 
-            <div className="h-50">
+            <Dropzone
+                className="h-100 d-flex flex-wrap bg-light"
+                activeClassName="border bg-secondary"
+                onDrop={(files) => handleDrop(target, files)}
+                style={{ 'minHeight': '100px' }}
+            >
                 {imgs.map(img => {
 
                     return (
@@ -21,7 +26,17 @@ const DragAndDrop = (props) => {
                             style={{ 'maxWidth': '320px' }}
                             key={img.name}
                         >
-                            <CardImg
+                            <img
+                                style={{
+                                    'position': 'relative',
+                                    'float': 'left',
+                                    'width': '100px',
+                                    'height': '100px',
+                                    'background-position': '50% 50%',
+                                    'background-repeat': 'no-repeat',
+                                    'background-size': 'cover',
+                                }}
+                                className="img-fluid"
                                 src={URL.createObjectURL(img)}
                                 alt={img.name}
 
@@ -29,8 +44,8 @@ const DragAndDrop = (props) => {
                         </Card>
                     )
                 })}
-            </div>
+            </Dropzone>
 
-        </Dropzone>)
+        </div>)
 }
 export default DragAndDrop;

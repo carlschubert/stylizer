@@ -100,9 +100,8 @@ export default class App extends Component {
         <Loading isLoading={isLoading}>
           {Object.keys(outputData).length > 0 ?
             <Fragment>
-
               <ImageDisplay outputData={outputData} name="Output" />
-              <Button onClick={this.reset}>Reset</Button>
+              <Button className="btn-lg btn-block" onClick={this.reset}>Reset</Button>
             </Fragment>
             :
             <Fragment>

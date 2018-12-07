@@ -16,7 +16,13 @@ const PasticheCarousel = (props) => {
             <CarouselItem
                 key={item}
             >
-                <img style={{ 'maxWidth': '320px' }} src={item} />
+                <img
+                    style={{
+                        'height': '200px',
+                        'width': 'auto'
+                    }}
+                    src={item}
+                />
             </CarouselItem>
         );
     });
@@ -26,8 +32,9 @@ const PasticheCarousel = (props) => {
             activeIndex={activeIndex}
             next={next}
             previous={previous}
+            interval={false}
         >
-            <CarouselIndicators items={items.map(item => { return { src: item }})} activeIndex={activeIndex} onClickHandler={goToIndex} />
+            <CarouselIndicators items={items.map(item => { return { src: item } })} activeIndex={activeIndex} onClickHandler={goToIndex} />
             {slides}
             <CarouselControl direction="prev" directionText="Previous" onClickHandler={previous} />
             <CarouselControl direction="next" directionText="Next" onClickHandler={next} />
