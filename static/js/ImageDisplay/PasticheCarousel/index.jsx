@@ -6,13 +6,23 @@ import {
     CarouselIndicators,
 } from 'reactstrap';
 
+const makeSrc = (url) => {
+
+    // If we don't do this the browser will use a cached image
+    const modified = Date.now().toString();
+
+    return `${url}?lastmod=${modified}`
+}
+
 const PasticheCarousel = (props) => {
-    const { items, next, previous, goToIndex, activeIndex } = props;
+    const { items, next, previous, goToIndex, activeIndex, sessionId } = props;
 
     console.log('PasticheCarousel props', props);
 
     const slides = items.map((item) => {
+
         return (
+
             <CarouselItem
                 key={item}
             >
@@ -21,7 +31,7 @@ const PasticheCarousel = (props) => {
                         'height': '200px',
                         'width': 'auto'
                     }}
-                    src={item}
+                    src={makeSrc(item)}
                 />
             </CarouselItem>
         );

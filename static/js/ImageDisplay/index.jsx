@@ -1,9 +1,7 @@
 import React from "react";
-import { Button } from 'reactstrap';
-import ImageDisplayRow from "./ImageDisplayRow";
 
 const ImageDisplay = (props) => {
-    const { outputData, name } = props
+    const { name } = props
 
     return (
         <div
@@ -14,7 +12,7 @@ const ImageDisplay = (props) => {
             <h3 className="text-center">{name}</h3>
 
             <div className="h-50 pb-3">
-                <ImageDisplayRow outputData={outputData} />
+                {props.children}
             </div>
 
         </div>)

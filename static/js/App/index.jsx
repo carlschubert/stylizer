@@ -5,6 +5,7 @@ import DragAndDrop from "../DragAndDrop"
 import GoButton from "../GoButton"
 import ImageDisplay from "../ImageDisplay";
 import Loading from '../Loading'
+import ImageDisplayRow from "../ImageDisplay/ImageDisplayRow";
 
 const initialState = {
   styleImgs: [],
@@ -13,6 +14,8 @@ const initialState = {
   isLoading: false,
 }
 
+const sessionId = Date.now();
+
 export default class App extends Component {
 
   state = initialState;
@@ -20,7 +23,8 @@ export default class App extends Component {
   handleDrop = (target, files) => {
 
     this.setState({
-      [target]: this.state[target].concat(files)
+      [target]: this.state[target].concat(files),
+
     })
   }
 
@@ -60,6 +64,7 @@ export default class App extends Component {
       payload.append('contentBin', contentImgs[i], `content_image_${i + 1}.jpg`);
     }
 
+    payload.append('sessionId', sessionId)
     // this.setState({
     //   outputData: testData
     // })
@@ -76,6 +81,7 @@ export default class App extends Component {
 
         return response.json();
       }).then(files => {
+        console.log('files', files)
         this.setState({
           outputData: files,
           isLoading: false
@@ -100,7 +106,9 @@ export default class App extends Component {
         <Loading isLoading={isLoading}>
           {Object.keys(outputData).length > 0 ?
             <Fragment>
-              <ImageDisplay outputData={outputData} name="Output" />
+              <ImageDisplay name="Output">
+                <ImageDisplayRow outputData={outputData} />
+              </ImageDisplay>
               <Button className="btn-lg btn-block" onClick={this.reset}>Reset</Button>
             </Fragment>
             :
@@ -125,3 +133,36 @@ export default class App extends Component {
     );
   }
 }
+
+const testData = {
+  "contents": [
+    "output/content_image_1.jpg",
+    "output/content_image_2.jpg"
+  ],
+  "interp_weights": {
+    "0": {
+      "0": [
+        "output/content_image_1_stylized_style_image_1_0.jpg",
+        "output/content_image_1_stylized_style_image_1_1.jpg",
+        "output/content_image_1_stylized_style_image_1_2.jpg",
+        "output/content_image_1_stylized_style_image_1_3.jpg",
+        "output/content_image_1_stylized_style_image_1_4.jpg",
+        "output/content_image_1_stylized_style_image_1_5.jpg"
+      ]
+    },
+    "1": {
+      "0": [
+        "output/content_image_2_stylized_style_image_1_0.jpg",
+        "output/content_image_2_stylized_style_image_1_1.jpg",
+        "output/content_image_2_stylized_style_image_1_2.jpg",
+        "output/content_image_2_stylized_style_image_1_3.jpg",
+        "output/content_image_2_stylized_style_image_1_4.jpg",
+        "output/content_image_2_stylized_style_image_1_5.jpg"
+      ]
+    }
+  },
+  "styles": [
+    "output/style_image_1.jpg"
+  ]
+}
+
