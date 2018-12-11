@@ -4,10 +4,7 @@ const ImageDisplay = (props) => {
     const { name } = props
 
     return (
-        <div
-            className="w-100"
-            style={{ 'minHeight': '30%' }}
-        >
+        <div className="mh-30 w-100">
 
             <h3 className="text-center">{name}</h3>
 

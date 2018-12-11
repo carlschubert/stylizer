@@ -6,7 +6,7 @@ class ImageDisplayRow extends Component {
     state = {
         style: 0,
         content: 0,
-        pastiche: 0,
+        pastiche: 4,
     }
 
 

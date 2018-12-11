@@ -5,7 +5,7 @@ import DragAndDrop from "../DragAndDrop"
 import GoButton from "../GoButton"
 import ImageDisplay from "../ImageDisplay";
 import Loading from '../Loading'
-import ImageDisplayRow from "../ImageDisplay/ImageDisplayRow";
+import ImageDisplayRow from "../ImageDisplayRow";
 
 const initialState = {
   styleImgs: [],
@@ -101,7 +101,7 @@ export default class App extends Component {
     const { outputData, styleImgs, contentImgs, isLoading } = this.state;
 
     return (
-      <Container style={{ 'minHeight': '100%' }}>
+      <Container className="mh-30">
         <Header />
         <Loading isLoading={isLoading}>
           {Object.keys(outputData).length > 0 ?

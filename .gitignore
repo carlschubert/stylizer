@@ -4,4 +4,4 @@ server/model
 server/images
 server/output
 static/dist
-*.pyc
+*.pyccredentials.csv

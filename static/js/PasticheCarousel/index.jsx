@@ -15,9 +15,7 @@ const makeSrc = (url) => {
 }
 
 const PasticheCarousel = (props) => {
-    const { items, next, previous, goToIndex, activeIndex, sessionId } = props;
-
-    console.log('PasticheCarousel props', props);
+    const { items, next, previous, goToIndex, activeIndex } = props;
 
     const slides = items.map((item) => {
 
@@ -26,19 +24,14 @@ const PasticheCarousel = (props) => {
             <CarouselItem
                 key={item}
             >
-                <img
-                    style={{
-                        'height': '200px',
-                        'width': 'auto'
-                    }}
-                    src={makeSrc(item)}
-                />
+                <img src={makeSrc(item)} />
             </CarouselItem>
         );
     });
 
     return (
         <Carousel
+            className="pastiche-carousel"
             activeIndex={activeIndex}
             next={next}
             previous={previous}

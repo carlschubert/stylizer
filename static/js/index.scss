@@ -5,3 +5,15 @@
 html, body, #root, #root > div {
     height: 100%
 }
+
+.card {
+    max-width: 320px;
+}
+
+.mh-30 {
+    min-height: 30%;
+}
+
+.mh-150px {
+    min-height: 150px;
+}
