@@ -7,7 +7,7 @@ set -e
 # EB_ENVIRONMENT
 source environment.sh
 
-source build.sh
+source build-prod.sh
 docker push $DOCKER_IMAGE
 pushd $EB_DEPLOY_DIR
 eb deploy $EB_ENVIRONMENT

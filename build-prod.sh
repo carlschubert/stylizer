@@ -1,3 +1,5 @@
+set -e
+
 source environment.sh
 
 pushd $STATIC_DIR
