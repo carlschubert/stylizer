@@ -4,4 +4,11 @@ server/model
 server/images
 server/output
 static/dist
-*.pyccredentials.csv
+**/*.pyc
+eb-deploy/
+**/__pycache__
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
