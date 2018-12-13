@@ -1,4 +1,4 @@
-set e
+set -e
 
 # Sets the following environment variables:
 # DOCKER_IMAGE
@@ -7,10 +7,7 @@ set e
 # EB_ENVIRONMENT
 source environment.sh
 
-pushd $STATIC_DIR
-npm run-script build
-popd
-docker build . -t $DOCKER_IMAGE
+source build.sh
 docker push $DOCKER_IMAGE
 pushd $EB_DEPLOY_DIR
 eb deploy $EB_ENVIRONMENT
