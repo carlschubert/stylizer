@@ -11,6 +11,4 @@ const config = merge(common, {
       
 })
 
-console.log(config)
-
 module.exports = config;
