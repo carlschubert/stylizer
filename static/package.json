@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack -p --progress --config webpack.config.js",
-    "dev-build": "webpack --progress -d --config webpack.config.js",
+    "build": "webpack -p --progress --config webpack/webpack.prod.config.js",
+    "dev-build": "webpack --progress -d --config webpack/webpack.dev.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack --progress -d --config webpack.config.js --watch",
+    "watch": "webpack --progress -d --config webpack/webpack.dev.config.js --watch",
     "start": "concurrently \"npm run-script watch\" \"python ../server/server.py\""
   },
   "author": "carlschubert goodwordalchemy",
@@ -30,7 +30,7 @@
     "uglifyjs-webpack-plugin": "^2.0.1",
     "webpack": "^4.27.0",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-merge": "^4.1.5"
   },
   "dependencies": {
     "bootstrap": "^4.1.3",
