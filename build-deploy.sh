@@ -1,15 +1,17 @@
 set e
 
-export DOCKER_REPO=carlschubert/nst
-export STATIC_DIR=static
-export EB_DEPLOY_DIR=eb-deploy
-export EB_ENVIRONMENT=remote-docker-env
+# Sets the following environment variables:
+# DOCKER_IMAGE
+# STATIC_DIR
+# EB_DEPLOY_DIR
+# EB_ENVIRONMENT
+source environment.sh
 
 pushd $STATIC_DIR
 npm run-script build
 popd
-docker build . -t $DOCKER_REPO
-docker push $DOCKER_REPO
+docker build . -t $DOCKER_IMAGE
+docker push $DOCKER_IMAGE
 pushd $EB_DEPLOY_DIR
 eb deploy $EB_ENVIRONMENT
 popd
