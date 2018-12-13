@@ -52,7 +52,7 @@ export default class App extends Component {
   handleSubmit = () => {
 
     const { styleImgs, contentImgs } = this.state
-    const url = 'http://localhost:5000/';
+    const url = 'http://remote-docker-env.gj32resjup.us-east-2.elasticbeanstalk.com/';
 
     const payload = new FormData();
 

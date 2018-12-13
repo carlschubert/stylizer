@@ -21,6 +21,7 @@ IMAGE_DIRECTORIES = [
 PASTICHE_URL_PATTERN = r'content_image_(\d+)_stylized_style_image_(\d+)_\d+.jpg'
 
 app = Flask(__name__, static_folder=STATIC_DIR, template_folder=STATIC_DIR)
+app.secret_key = str(os.urandom(24))[2:-1]
 
 def make_nst_bash_script(session_id):
   return """arbitrary_image_stylization_with_weights \
