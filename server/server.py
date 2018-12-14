@@ -115,6 +115,19 @@ def get_image_metadata(session_id):
     return metadata
 
 
+def validate_images(images):
+    return not all([test_reading_file_buffer(im) for im in images])
+
+
+def save_images(images, path, session_id):
+    for im in images:
+        si = os.path.join(
+            SERVER_DIR, path,
+            session_id, im.filename
+        )
+        im.save(si)
+
+
 @app.route('/output/<path:image_path>')
 def output(image_path):
     image_path = os.path.join(STATIC_DIR, 'output', image_path)
@@ -132,18 +145,17 @@ def output(image_path):
 def serve_js():
     return send_from_directory(app.static_folder, 'bundle.js')
 
+@app.route('/<path:image_path>')
+def static_images(image_path):
+    image_path = os.path.join(STATIC_DIR, image_path)
 
-def validate_images(images):
-    return not all([test_reading_file_buffer(im) for im in images])
+    with open(image_path, 'rb') as handle:
+        image_binary = handle.read()
 
+    response = make_response(image_binary)
+    response.headers.set('Content-Type', 'image/jpeg')
 
-def save_images(images, path, session_id):
-    for im in images:
-        si = os.path.join(
-            SERVER_DIR, path,
-            session_id, im.filename
-        )
-        im.save(si)
+    return response
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -159,13 +171,13 @@ def main():
             return jsonify({"validation": "Could not read image"})
 
         if not len(style_images) and not len(content_images):
-            jsonify({"validation": "Please add an image"})
+            return jsonify({"validation": "Please add an image"})
 
         if not len(style_images):
-            jsonify({"validation": "Please add a style image"})
+            return jsonify({"validation": "Please add a style image"})
 
         if not len(content_images):
-            jsonify({"validation": "Please add a content image"})
+            return jsonify({"validation": "Please add a content image"})
 
         session_id = request.form['sessionId']
 

@@ -4,7 +4,7 @@ import { Button } from "reactstrap"
 const GoButton = (props) => {
     const { handleSubmit } = props;
     return (<Button 
-        className="mt-2 btn-lg btn-block"
+        className="primary mt-2 btn-lg btn-block"
         onClick={handleSubmit}
         >
         Go!
