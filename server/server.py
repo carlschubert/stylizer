@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import io
-import os  
+import os
 import re
+import shutil
 import subprocess
+from scipy.misc import imread
 
 from flask import (
-  Flask, render_template, request, jsonify, 
-  make_response, send_from_directory
+    Flask, render_template, request, jsonify,
+    make_response, send_from_directory
 )
 
 SERVER_DIR = "../server"
@@ -15,9 +17,9 @@ STATIC_DIR = "../static/dist"
 
 # TODO: make this a dictionary and remove some of the path construction later in file
 IMAGE_DIRECTORIES = [
-  os.path.join(SERVER_DIR, 'images/style_images'),
-  os.path.join(SERVER_DIR, 'images/content_images'),
-  os.path.join(STATIC_DIR, 'output')
+    os.path.join(SERVER_DIR, 'images/style_images'),
+    os.path.join(SERVER_DIR, 'images/content_images'),
+    os.path.join(STATIC_DIR, 'output')
 ]
 
 PASTICHE_URL_PATTERN = r'content_image_(\d+)_stylized_style_image_(\d+)_\d+.jpg'
@@ -25,8 +27,13 @@ PASTICHE_URL_PATTERN = r'content_image_(\d+)_stylized_style_image_(\d+)_\d+.jpg'
 app = Flask(__name__, static_folder=STATIC_DIR, template_folder=STATIC_DIR)
 app.secret_key = str(os.urandom(24))[2:-1]
 
+
+def _log(msg):
+    app.logger.debug(msg)
+
+
 def make_nst_bash_script(session_id):
-  return """arbitrary_image_stylization_with_weights \
+    return """arbitrary_image_stylization_with_weights \
   --checkpoint={server_dir}/model/model.ckpt \
   --output_dir={static_dir}/output/{session_id} \
   --style_images_paths={server_dir}/images/style_images/{session_id}/*.jpg \
