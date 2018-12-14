@@ -37,117 +37,151 @@ def make_nst_bash_script(session_id):
   --style_square_crop=False \
   --interpolation_weights=[0.0,0.2,0.4,0.6,0.8,1.0] \
   --logtostderr""".format(
-      server_dir=SERVER_DIR, static_dir=STATIC_DIR,
-      session_id=session_id)
+        server_dir=SERVER_DIR, static_dir=STATIC_DIR,
+        session_id=session_id)
 
- 
+
 def run_script(session_id):
     cmd = make_nst_bash_script(session_id)
     subprocess.call(cmd, shell=True)
 
+
 def cleanup_dir(d):
-  files = os.listdir(d)
-  for f in files:
-    os.remove(os.path.join(d, f))
+    files = os.listdir(d)
+    for f in files:
+        os.remove(os.path.join(d, f))
+
 
 def cleanup_server(session_id):
-  for d in ['images/style_images', 'images/content_images']:
-    cleanup_dir(os.path.join(SERVER_DIR, d, session_id))
+    for d in ['images/style_images', 'images/content_images']:
+        cleanup_dir(os.path.join(SERVER_DIR, d, session_id))
+
 
 def cleanup_static(session_id):
-  cleanup_dir(os.path.join(STATIC_DIR, 'output', session_id))
+    cleanup_dir(os.path.join(STATIC_DIR, 'output', session_id))
+
 
 def setup_session_directories(session_id):
-  for d in IMAGE_DIRECTORIES:
-    if os.path.exists(os.path.join(d, session_id)):
-      return
-    os.mkdir(os.path.join(d, session_id))
+    for d in IMAGE_DIRECTORIES:
+        if os.path.exists(os.path.join(d, session_id)):
+            return
+        os.mkdir(os.path.join(d, session_id))
+
+
+def test_reading_file_buffer(buffer):
+    try:
+        imread(buffer)
+        buffer.seek(0)
+        return True
+    except IOError as e:
+        _log("Got an error reading an image %s " % e.message)
+        return False
+
 
 def get_image_metadata(session_id):
-  output_urls = os.listdir(os.path.join(STATIC_DIR, "output", session_id))
-  print(output_urls)
+    output_urls = os.listdir(os.path.join(STATIC_DIR, "output", session_id))
+    print(output_urls)
 
-  styles = []
-  contents = []
-  iws = {}
-  for url in sorted(output_urls):
-    if 'content_image' in url and 'style_image' in url:
-      csource, ssource = re.match(PASTICHE_URL_PATTERN, url).groups()
-      
-      iws.setdefault(int(csource)-1, {}).setdefault(int(ssource)-1, []).append(
-        os.path.join('output', session_id, url)
-      )
-    elif 'content_image' in url:
-      contents.append(os.path.join('output', session_id, url))
-      
-    elif 'style_image' in url:
-      styles.append(os.path.join('output', session_id, url))
-    else:
-      raise Exception("Unexpected result type: {}".format(url))
+    styles = []
+    contents = []
+    iws = {}
+    for url in sorted(output_urls):
+        if 'content_image' in url and 'style_image' in url:
+            csource, ssource = re.match(PASTICHE_URL_PATTERN, url).groups()
 
-  metadata = {
-    'styles':styles,
-    'contents': contents,
-    'interp_weights': iws
-  }
-  return metadata
+            iws.setdefault(int(csource)-1, {}).setdefault(int(ssource)-1, []).append(
+                os.path.join('output', session_id, url)
+            )
+        elif 'content_image' in url:
+            contents.append(os.path.join('output', session_id, url))
+
+        elif 'style_image' in url:
+            styles.append(os.path.join('output', session_id, url))
+        else:
+            raise Exception("Unexpected result type: {}".format(url))
+
+    metadata = {
+        'styles': styles,
+        'contents': contents,
+        'interp_weights': iws
+    }
+    return metadata
+
 
 @app.route('/output/<path:image_path>')
 def output(image_path):
-  image_path = os.path.join(STATIC_DIR, 'output', image_path)
+    image_path = os.path.join(STATIC_DIR, 'output', image_path)
 
-  with open(image_path, 'rb') as handle:
-    image_binary = handle.read()
-  
-  response = make_response(image_binary)
-  response.headers.set('Content-Type', 'image/jpeg')
-  
-  return response
+    with open(image_path, 'rb') as handle:
+        image_binary = handle.read()
+
+    response = make_response(image_binary)
+    response.headers.set('Content-Type', 'image/jpeg')
+
+    return response
+
 
 @app.route('/bundle.js')
 def serve_js():
-  return send_from_directory(app.static_folder, 'bundle.js')
+    return send_from_directory(app.static_folder, 'bundle.js')
+
+
+def validate_images(images):
+    return not all([test_reading_file_buffer(im) for im in images])
+
+
+def save_images(images, path, session_id):
+    for im in images:
+        si = os.path.join(
+            SERVER_DIR, path,
+            session_id, im.filename
+        )
+        im.save(si)
+
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
-    # TODO form validaton
-      # * must be jpeg
-      # * must be secure url
-      # * at least one style and content image
-      # * handle filetypes other than jpg
-    
     if request.method == 'POST':
-      session_id =  request.form['sessionId']
 
-      setup_session_directories(session_id)
-      
-      cleanup_static(session_id)
+        style_images = request.files.getlist('styleBin')
 
-      style_images = request.files.getlist('styleBin')
-      for i, im in enumerate(style_images):
-        im.save(os.path.join(
-          SERVER_DIR, "images/style_images", 
-          session_id, im.filename
-        ))
+        content_images = request.files.getlist('contentBin')
 
-      content_images = request.files.getlist('contentBin')
-      for i, im in enumerate(content_images):
-        im.save(os.path.join(
-          SERVER_DIR, "images/content_images", 
-          session_id, im.filename
-        ))
+        _log(style_images + content_images)
+        if validate_images(style_images + content_images):
+            return jsonify({"validation": "Could not read image"})
 
-      run_script(session_id)
+        if not len(style_images) and not len(content_images):
+            jsonify({"validation": "Please add an image"})
 
-      image_metadata = get_image_metadata(session_id)
-      
-      cleanup_server(session_id)
+        if not len(style_images):
+            jsonify({"validation": "Please add a style image"})
 
-      return jsonify(image_metadata)
+        if not len(content_images):
+            jsonify({"validation": "Please add a content image"})
+
+        session_id = request.form['sessionId']
+
+        setup_session_directories(session_id)
+
+        cleanup_static(session_id)
+
+        save_images(style_images, 'images/style_images', session_id)
+
+        save_images(content_images, 'images/content_images', session_id)
+
+        run_script(session_id)
+
+        image_metadata = get_image_metadata(session_id)
+
+        cleanup_server(session_id)
+
+        return jsonify(image_metadata)
+
     else:
-      return render_template("index.html")
+        return render_template("index.html")
+
 
 if __name__ == "__main__":
-  
-  app.run(debug=True, host=('0.0.0.0'), port=5000)
 
+    app.run(debug=True, host=('0.0.0.0'), port=5000)
