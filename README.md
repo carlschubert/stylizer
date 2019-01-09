@@ -1,5 +1,6 @@
 # Neural Style Transfer
 
+<<<<<<< HEAD
 This app allows you to experiment with arbitrary neural transfer as specified in [this paper](https://arxiv.org/abs/1705.06830). Arbitrary style transfer application of machine learning. It allows you to redraw the content of any image in the style of any other.
 
 1.) cd to static directory and run ```npm install```
@@ -16,3 +17,10 @@ Instructions for using the app:
     5. View your processed images in a carousel in order of interpolation.  
 
 There are also shell scripts to deploy this to aws elastic beanstalk.  I don't have it deployed right now because it is too expensive to run on free tier but there is an example environment file that can be completed.
+=======
+1.) cd to static directory and run npm install
+
+2.) Download model from magenta from [this link](http://download.tensorflow.org/models/vgg_16_2016_08_28.tar.gz). (Or train your own...).  Put it new directory at server/model.
+
+3.) run `./build-dev.sh`
+>>>>>>> 5a228f0a48c50b62e36890929d35f24275ecddb4
