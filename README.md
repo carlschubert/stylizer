@@ -2,10 +2,10 @@
 
 This app allows you to experiment with arbitrary neural transfer as specified in [this paper](https://arxiv.org/abs/1705.06830). Arbitrary style transfer application of machine learning. It allows you to redraw the content of any image in the style of any other.
 
-1.) cd to static directory and run ```npm install```
-2.) Download model from magenta from [this link](http://download.tensorflow.org/models/vgg_16_2016_08_28.tar.gz). (Or train your own...).  Put it new directory at server/model.
-3.) Run ```./build-dev```
-4.) Use the app in the browser on ```http://0.0.0.0:5000/```
+1.  cd to static directory and run ```npm install```
+2.  Download model from magenta from [this link](http://download.tensorflow.org/models/vgg_16_2016_08_28.tar.gz). (Or train your own...).  Put it new directory at server/model.
+3.  Run ```./build-dev```
+4.  Use the app in the browser on ```http://0.0.0.0:5000/```
 
 Instructions for using the app:
 
