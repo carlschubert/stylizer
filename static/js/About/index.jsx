@@ -43,7 +43,7 @@ class About extends Component {
                     <ModalHeader toggle={this.toggle}>Neural Style Transfer</ModalHeader>
                     <ModalBody>
                         <p>
-                            This app allows you to experiment with arbitrary neural transfer as specified in link.  Arbitrary style transfer application of machine learning.  It allows you to redraw the content of any image in the style of any other.
+                            This app allows you to experiment with arbitrary neural transfer as specified in <a href="https://arxiv.org/abs/1705.06830">this link</a>.  Arbitrary style transfer application of machine learning.  It allows you to redraw the content of any image in the style of any other.
                         </p>
                         <h2>
                             Instructions:
@@ -62,7 +62,7 @@ class About extends Component {
                             Wait.
                             </li>
                             <li>
-                            Be amazed.
+                            View your processed images in a carousel in order of interpolation.  
                             </li>
                         </ol>
                         <h2>
